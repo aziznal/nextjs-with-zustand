@@ -7,8 +7,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { useCounterStore } from "@/lib/stores/counter";
 import {
   ExampleForm,
@@ -19,6 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 export default function Home() {
+  const { toast } = useToast();
   const { count, increment, decrement } = useCounterStore();
 
   const formStore = useExampleFormStore();
@@ -31,9 +39,15 @@ export default function Home() {
     },
   });
 
-  form.watch((values) => {
+  const onFormSubmit = form.handleSubmit((values) => {
     if (values.email) formStore.setEmail(values.email);
     if (values.password) formStore.setPassword(values.password);
+
+    toast({
+      title: "Form Saved",
+      description: <span className="text-xl">Try refreshing your screen!</span>,
+      className: "bg-green-600 text-white",
+    });
   });
 
   if (!window) {
@@ -42,8 +56,12 @@ export default function Home() {
 
   return (
     <div className="h-full flex flex-col items-center justify-center gap-12">
+      <span className="text-gray-400 italic">
+        {`The Counter's value is persisted even if you refresh your tab!`}
+      </span>
+
       {/* Counter Example */}
-      <div className="flex items-center justify-between gap-12 w-[450px]">
+      <div className="flex items-center justify-between gap-12 w-[450px] mb-24">
         <h1 className="text-6xl">Counter: {count}</h1>
 
         <div className="flex flex-col gap-4">
@@ -65,14 +83,17 @@ export default function Home() {
         </div>
       </div>
 
+      <span className="text-gray-400 italic">
+        The values of the form below will be only be persisted if the fields are
+        valid
+      </span>
+
       {/* Form Example */}
       <div className="flex flex-col gap-8">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((values) => {
-              console.log("Form submitted with below values:");
-              console.log(values);
-            })}
+            onSubmit={onFormSubmit}
+            className="flex flex-col gap-5 w-[400px]"
           >
             <FormField
               control={form.control}
@@ -83,6 +104,8 @@ export default function Home() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -96,9 +119,25 @@ export default function Home() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+
+                  <FormMessage />
                 </FormItem>
               )}
             />
+
+            <HoverCard openDelay={0} closeDelay={200}>
+              <HoverCardTrigger className="w-fit self-end">
+                <Button type="submit">Save</Button>
+              </HoverCardTrigger>
+
+              <HoverCardContent>
+                <HoverCard openDelay={0} closeDelay={200}>
+                  <HoverCardTrigger>Zustand is aweosme</HoverCardTrigger>
+
+                  <HoverCardContent>Also Shadcn</HoverCardContent>
+                </HoverCard>
+              </HoverCardContent>
+            </HoverCard>
           </form>
         </Form>
       </div>
