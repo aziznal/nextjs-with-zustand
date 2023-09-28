@@ -1,11 +1,14 @@
 # Nextjs with Zustand
 
+
 This is an example of how zustand can be used as a store with integrates seamlessly
 with react as a hook, and has a ton of useful middleware such as persisting state
 in localStorage, among many others.
 
 I made a simple counter example, and a slightly more advanced example with a form
 where the form's content is persisted.
+
+![nextjs with zustand example app](preview.png)
 
 ---
 
