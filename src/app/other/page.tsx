@@ -57,7 +57,8 @@ export default function Home() {
 
   return (
     <div className="h-full flex flex-col items-center justify-center gap-12">
-      <Link href="/other">Other Page</Link>
+
+      <Link href="/">Main</Link>
 
       <span className="text-gray-400 italic">
         {`The Counter's value is persisted even if you refresh your tab!`}
